@@ -70,6 +70,11 @@ def detect_anomalies_lof(df, feature_column, n_neighbors):
     df['anomaly_lof'] = lof.fit_predict(df[[feature_column]].dropna())
     anomalies = df[df['anomaly_lof'] == -1]
     return anomalies
+
+@st.cache_data(ttl="2h")
+def get_numerical_columns(df):
+    numerical_cols = df.select_dtypes(include=np.number).columns.tolist()
+    return numerical_cols
 #---------------------------------------------------------------------------------------------------------------------------------
 ### Main App
 #---------------------------------------------------------------------------------------------------------------------------------
@@ -77,14 +82,21 @@ def detect_anomalies_lof(df, feature_column, n_neighbors):
 uploaded_file = st.file_uploader("**:blue[Choose a file]**",type=["csv", "xls", "xlsx"], accept_multiple_files=False, key="file_upload")
 if uploaded_file is not None:
     df = load_data(uploaded_file)
+    stats_expander = st.expander("**Preview of Information**", expanded=True)
+    with stats_expander:  
+        st.table(df.head(2))
     st.divider()
 
     col1, col2 = st.columns((0.3,0.7))
 
     with col1:
-        st.subheader("Methods & Parameters", divider='blue')    
-
-        target_variable = st.selectbox("target variable for anomaly detection", df.columns)
+        st.subheader("Methods", divider='blue')    
+        numerical_columns = get_numerical_columns(df)
+        if not numerical_columns:
+            st.sidebar.warning("No numerical columns found in the uploaded file.")
+        else:
+            target_variable = st.sidebar.selectbox("target variable for anomaly detection", numerical_columns)
+        #target_variable = st.selectbox("target variable for anomaly detection", df.columns)
         ad_det_type = st.selectbox("Anomaly Detection Method", [
         "Isolation Forest",
         "Z-score",
@@ -94,20 +106,24 @@ if uploaded_file is not None:
         st.divider()
 
         if ad_det_type == "Z-score":
+            st.subheader("Parameters", divider='blue')    
             zscore_threshold = st.slider("Z-score Threshold", min_value=1, max_value=10, value=3)
             anomalies = detect_anomalies_zscore(df, target_variable, threshold=zscore_threshold)
     
         elif ad_det_type == "Isolation Forest":
+            st.subheader("Parameters", divider='blue')  
             n_estimators = st.number_input("Number of trees in the forest", 100, 5000, step=10, key='n_estimators_ad')
             contamination = st.number_input("Proportion of outliers in the data set", 0.0, 0.1, 0.05, step=0.01, key='contamination_ad')
             anomalies = detect_anomalies_isolation_forest(df, target_variable, n_estimators, contamination)
 
         elif ad_det_type == "DBSCAN":
+            st.subheader("Parameters", divider='blue')  
             eps = st.slider("DBSCAN eps", 0.1, 10.0, 0.5)
             min_samples = st.slider("DBSCAN min_samples", 1, 50, 5)
             anomalies = detect_anomalies_dbscan(df, target_variable, eps, min_samples)
 
         elif ad_det_type == "LOF":
+            st.subheader("Parameters", divider='blue')  
             n_neighbors = st.slider("LOF n_neighbors", 1, 50, 20)
             anomalies = detect_anomalies_lof(df, target_variable, n_neighbors)
 
