@@ -87,15 +87,17 @@ if uploaded_file is not None:
         st.table(df.head(2))
     st.divider()
 
-    col1, col2 = st.columns((0.2,0.8))
+    numerical_columns = get_numerical_columns(df)
+    if not numerical_columns:
+        st.warning("No numerical columns found in the uploaded file.")
 
-    with col1:
+    else:
+        col1, col2 = st.columns((0.2,0.8))
 
-        st.subheader("Methods", divider='blue')    
-        numerical_columns = get_numerical_columns(df)
-        if not numerical_columns:
-            st.warning("No numerical columns found in the uploaded file.")
-        else:
+        with col1:
+
+            st.subheader("Methods", divider='blue')    
+
             target_variable = st.selectbox("target variable for anomaly detection", numerical_columns)
             #target_variable = st.selectbox("target variable for anomaly detection", df.columns)
 
