@@ -67,31 +67,31 @@ if file:
     
     with col1:
 
-        st.subheader("Method & Parameters", divider='blue')
         target_variable = st.selectbox("**Target (Dependent) Variable**", df.columns)
-        ad_type = st.selectbox("**Select an Anomaly Detection Method**", [
-                                "Isolation Forest",
-                                "Z-score",
-                                "DBSCAN",
-                                "Local Outlier Factor (LOF)"])
+        if target_variable:
+            
+            st.subheader("Method & Parameters", divider='blue')
+            ad_type = st.selectbox("**Select an Anomaly Detection Method**", [
+                                    "Isolation Forest",
+                                    "Z-score",
+                                    "DBSCAN",
+                                    "Local Outlier Factor (LOF)"])
         
-        st.divider()
-
-        if ad_type == "Isolation Forest":
-
-            n_estimators = st.number_input("**The number of trees in the forest**", 100, 5000, step=10, key='n_estimators_ad')
-            contamination = st.number_input("**The proportion of outliers in the data set**", 0.0, 0.1, 0.05, step=0.01, key='contamination_ad')
-
-    with col2:
-
-        st.subheader("Result & Visualizations", divider='blue')
-
-        if ad_type == "Isolation Forest":
-
-            anomalies = anomalies_if(df[['value']], n_estimators, contamination)
-            st.warning("#### Anomalies Detected:")
-            st.table(anomalies.head())
-
             st.divider()
 
-            
+            if ad_type == "Isolation Forest":
+
+                n_estimators = st.number_input("**The number of trees in the forest**", 100, 5000, step=10, key='n_estimators_ad')
+                contamination = st.number_input("**The proportion of outliers in the data set**", 0.0, 0.1, 0.05, step=0.01, key='contamination_ad')
+
+                with col2:
+
+                    st.subheader("Result & Visualizations", divider='blue')
+
+                    anomalies = anomalies_if(df[['value']], n_estimators, contamination)
+                    st.warning("#### Anomalies Detected:")
+                    st.table(anomalies.head())
+
+                    st.divider()
+
+
