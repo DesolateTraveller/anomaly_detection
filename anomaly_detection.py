@@ -84,8 +84,8 @@ if uploaded_file is not None:
     with col1:
         st.subheader("Methods & Parameters", divider='blue')    
 
-        target_variable = st.selectbox("Select the target variable for anomaly detection", df.columns)
-        ad_det_type = st.selectbox("Select an Anomaly Detection Method", [
+        target_variable = st.selectbox("target variable for anomaly detection", df.columns)
+        ad_det_type = st.selectbox("Anomaly Detection Method", [
         "Isolation Forest",
         "Z-score",
         "DBSCAN",
@@ -94,28 +94,28 @@ if uploaded_file is not None:
         st.divider()
 
         if ad_det_type == "Z-score":
-            zscore_threshold = st.sidebar.slider("Z-score Threshold", min_value=1, max_value=10, value=3)
+            zscore_threshold = st.slider("Z-score Threshold", min_value=1, max_value=10, value=3)
             anomalies = detect_anomalies_zscore(df, target_variable, threshold=zscore_threshold)
     
         elif ad_det_type == "Isolation Forest":
-            n_estimators = st.sidebar.number_input("Number of trees in the forest", 100, 5000, step=10, key='n_estimators_ad')
-            contamination = st.sidebar.number_input("Proportion of outliers in the data set", 0.0, 0.1, 0.05, step=0.01, key='contamination_ad')
+            n_estimators = st.number_input("Number of trees in the forest", 100, 5000, step=10, key='n_estimators_ad')
+            contamination = st.number_input("Proportion of outliers in the data set", 0.0, 0.1, 0.05, step=0.01, key='contamination_ad')
             anomalies = detect_anomalies_isolation_forest(df, target_variable, n_estimators, contamination)
 
         elif ad_det_type == "DBSCAN":
-            eps = st.sidebar.slider("DBSCAN eps", 0.1, 10.0, 0.5)
-            min_samples = st.sidebar.slider("DBSCAN min_samples", 1, 50, 5)
+            eps = st.slider("DBSCAN eps", 0.1, 10.0, 0.5)
+            min_samples = st.slider("DBSCAN min_samples", 1, 50, 5)
             anomalies = detect_anomalies_dbscan(df, target_variable, eps, min_samples)
 
         elif ad_det_type == "LOF":
-            n_neighbors = st.sidebar.slider("LOF n_neighbors", 1, 50, 20)
+            n_neighbors = st.slider("LOF n_neighbors", 1, 50, 20)
             anomalies = detect_anomalies_lof(df, target_variable, n_neighbors)
 
     with col2:
         st.subheader("Output & Visualizations", divider='blue')    
 
-        st.subheader("Detected Anomalies")
-        st.table(anomalies)
+        st.warning("### Anomalies Detected:")
+        st.table(anomalies.head())
 
         st.subheader("Graph")
         fig, ax = plt.subplots(figsize=(10, 4))
