@@ -35,3 +35,24 @@ st.divider()
 #---------------------------------------------------------------------------------------------------------------------------------
 ### Functions & Definitions
 #---------------------------------------------------------------------------------------------------------------------------------
+
+@st.cache_data(ttl="2h")
+def load_file(file):
+    file_extension = file.name.split('.')[-1]
+    if file_extension == 'csv':
+        df = pd.read_csv(file, sep=None, engine='python', encoding='utf-8', parse_dates=True, infer_datetime_format=True)
+    elif file_extension in ['xls', 'xlsx']:
+        df = pd.read_excel(file)
+    else:
+        st.error("Unsupported file format")
+        df = pd.DataFrame()
+    return df
+
+#---------------------------------------------------------------------------------------------------------------------------------
+### Main App
+#---------------------------------------------------------------------------------------------------------------------------------
+
+file = st.sidebar.file_uploader("**:blue[Choose a file]**",type=["csv", "xls", "xlsx"], accept_multiple_files=False, key="file_upload")
+if file:
+    df = load_file(file)
+    st.divider()
