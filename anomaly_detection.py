@@ -88,7 +88,7 @@ if file:
 
                     st.subheader("Result & Visualizations", divider='blue')
 
-                    anomalies = anomalies_if(df[['value']], n_estimators, contamination)
+                    anomalies = anomalies_if(df[target_variable], n_estimators, contamination)
                     st.warning("#### Anomalies Detected:")
                     st.table(anomalies.head())
 
