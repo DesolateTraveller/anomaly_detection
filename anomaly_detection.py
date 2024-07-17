@@ -56,3 +56,14 @@ file = st.file_uploader("**:blue[Choose a file]**",type=["csv", "xls", "xlsx"], 
 if file:
     df = load_file(file)
     st.divider()
+
+    col1, col2, col3 = st.columns((0.3, 0.3, 0.8))
+    
+    with col1:
+
+        st.subheader("Method & Parameters", divider='blue')
+        ad_type = st.selectbox("**Select an Anomaly Detection Method**", [
+                                "Method 1: Isolation Forest based anomaly detection",
+                                "Method 2: Z-score based anomaly detection",
+                                "Method 3: DBSCAN based anomaly detection",
+                                "Method 4: LOF based anomaly detection"])
