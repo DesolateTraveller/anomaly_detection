@@ -93,9 +93,9 @@ if uploaded_file is not None:
         st.subheader("Methods", divider='blue')    
         numerical_columns = get_numerical_columns(df)
         if not numerical_columns:
-            st.sidebar.warning("No numerical columns found in the uploaded file.")
+            st.warning("No numerical columns found in the uploaded file.")
         else:
-            target_variable = st.sidebar.selectbox("target variable for anomaly detection", numerical_columns)
+            target_variable = st.selectbox("target variable for anomaly detection", numerical_columns)
         #target_variable = st.selectbox("target variable for anomaly detection", df.columns)
         ad_det_type = st.selectbox("Anomaly Detection Method", [
         "Isolation Forest",
