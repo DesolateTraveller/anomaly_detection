@@ -97,51 +97,54 @@ if uploaded_file is not None:
             st.warning("No numerical columns found in the uploaded file.")
         else:
             target_variable = st.selectbox("target variable for anomaly detection", numerical_columns)
-        #target_variable = st.selectbox("target variable for anomaly detection", df.columns)
+            #target_variable = st.selectbox("target variable for anomaly detection", df.columns)
 
-        ad_det_type = st.selectbox("Anomaly Detection Method", [
+            ad_det_type = st.selectbox("Anomaly Detection Method", [
                                     "Isolation Forest",
                                     "Z-score",
                                     "DBSCAN",
                                     "LOF"
                                     ])
-        st.divider()
+            st.divider()
 
-        if ad_det_type == "Z-score":
-            st.subheader("Parameters", divider='blue')    
-            zscore_threshold = st.slider("Z-score Threshold", min_value=1, max_value=10, value=3)
-            anomalies = detect_anomalies_zscore(df, target_variable, threshold=zscore_threshold)
+            if ad_det_type == "Z-score":
+                st.subheader("Parameters", divider='blue')    
+                zscore_threshold = st.slider("Z-score Threshold", min_value=1, max_value=10, value=3)
+                anomalies = detect_anomalies_zscore(df, target_variable, threshold=zscore_threshold)
     
-        elif ad_det_type == "Isolation Forest":
-            st.subheader("Parameters", divider='blue')  
-            n_estimators = st.number_input("Number of trees in the forest", 100, 5000, step=10, key='n_estimators_ad')
-            contamination = st.number_input("Proportion of outliers in the data set", 0.0, 0.1, 0.05, step=0.01, key='contamination_ad')
-            anomalies = detect_anomalies_isolation_forest(df, target_variable, n_estimators, contamination)
+            elif ad_det_type == "Isolation Forest":
+                st.subheader("Parameters", divider='blue')  
+                n_estimators = st.number_input("Number of trees in the forest", 100, 5000, step=10, key='n_estimators_ad')
+                contamination = st.number_input("Proportion of outliers in the data set", 0.0, 0.1, 0.05, step=0.01, key='contamination_ad')
+                anomalies = detect_anomalies_isolation_forest(df, target_variable, n_estimators, contamination)
 
-        elif ad_det_type == "DBSCAN":
-            st.subheader("Parameters", divider='blue')  
-            eps = st.slider("DBSCAN eps", 0.1, 10.0, 0.5)
-            min_samples = st.slider("DBSCAN min_samples", 1, 50, 5)
-            anomalies = detect_anomalies_dbscan(df, target_variable, eps, min_samples)
+            elif ad_det_type == "DBSCAN":
+                st.subheader("Parameters", divider='blue')  
+                eps = st.slider("DBSCAN eps", 0.1, 10.0, 0.5)
+                min_samples = st.slider("DBSCAN min_samples", 1, 50, 5)
+                anomalies = detect_anomalies_dbscan(df, target_variable, eps, min_samples)
 
-        elif ad_det_type == "LOF":
-            st.subheader("Parameters", divider='blue')  
-            n_neighbors = st.slider("LOF n_neighbors", 1, 50, 20)
-            anomalies = detect_anomalies_lof(df, target_variable, n_neighbors)
+            elif ad_det_type == "LOF":
+                st.subheader("Parameters", divider='blue')  
+                n_neighbors = st.slider("LOF n_neighbors", 1, 50, 20)
+                anomalies = detect_anomalies_lof(df, target_variable, n_neighbors)
 
-    with col2:
+            with col2:
 
-        st.subheader("Output", divider='blue')    
+                st.subheader("Output", divider='blue')    
 
-        st.warning("#### Anomalies Detected:")
-        st.table(anomalies.head())
+                st.warning("#### Anomalies Detected:")
+                st.table(anomalies.head())
 
-        st.subheader("Visualizations", divider='blue') 
-        fig, ax = plt.subplots(figsize=(10, 4))
-        ax.plot(df.index, df[target_variable], label='Original Data', color='blue')
-        ax.scatter(anomalies.index, anomalies[target_variable], color='red', label='Anomalies')
-        ax.set_title('Anomaly Detection in Production Data')
-        ax.set_xlabel('Index')
-        ax.set_ylabel(target_variable)
-        ax.legend()
-        st.pyplot(fig)
+                st.subheader("Visualizations", divider='blue') 
+                fig, ax = plt.subplots(figsize=(10, 4))
+                ax.plot(df.index, df[target_variable], label='Original Data', color='blue')
+                ax.scatter(anomalies.index, anomalies[target_variable], color='red', label='Anomalies')
+                ax.set_title('Anomaly Detection in Production Data')
+                ax.set_xlabel('Index')
+                ax.set_ylabel(target_variable)
+                ax.legend()
+                st.pyplot(fig, use_container_width=True)
+
+
+
