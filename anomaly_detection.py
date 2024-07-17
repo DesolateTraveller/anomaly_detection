@@ -52,7 +52,7 @@ def load_file(file):
 ### Main App
 #---------------------------------------------------------------------------------------------------------------------------------
 
-file = st.sidebar.file_uploader("**:blue[Choose a file]**",type=["csv", "xls", "xlsx"], accept_multiple_files=False, key="file_upload")
+file = st.file_uploader("**:blue[Choose a file]**",type=["csv", "xls", "xlsx"], accept_multiple_files=False, key="file_upload")
 if file:
     df = load_file(file)
     st.divider()
