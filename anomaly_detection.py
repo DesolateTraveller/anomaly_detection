@@ -37,61 +37,95 @@ st.divider()
 #---------------------------------------------------------------------------------------------------------------------------------
 
 @st.cache_data(ttl="2h")
-def load_file(file):
-    file_extension = file.name.split('.')[-1]
-    if file_extension == 'csv':
-        df = pd.read_csv(file, sep=None, engine='python', encoding='utf-8', parse_dates=True, infer_datetime_format=True)
-    elif file_extension in ['xls', 'xlsx']:
-        df = pd.read_excel(file)
-    else:
-        st.error("Unsupported file format")
-        df = pd.DataFrame()
+def load_data(uploaded_file):
+    df = pd.read_csv(uploaded_file)
     return df
 
 @st.cache_data(ttl="2h")
-def anomalies_if(df, n_estimators, contamination):
+def detect_anomalies_zscore(df, feature_column, threshold=3):
+    z_scores = np.abs(zscore(df[feature_column].dropna()))
+    anomaly_mask = z_scores > threshold
+    anomalies = df[anomaly_mask]
+    return anomalies
+
+@st.cache_data(ttl="2h")
+def detect_anomalies_isolation_forest(df, feature_column, n_estimators, contamination):
     model = IsolationForest(n_estimators=n_estimators, contamination=contamination)
-    model.fit(df)
-    anomalies = df[model.predict(df) == -1]
+    model.fit(df[[feature_column]].dropna())
+    anomalies = df[model.predict(df[[feature_column]].dropna()) == -1]
+    return anomalies
+
+@st.cache_data(ttl="2h")
+def detect_anomalies_dbscan(df, feature_column, eps, min_samples):
+    scaler = StandardScaler()
+    df_scaled = scaler.fit_transform(df[[feature_column]].dropna())
+    dbscan = DBSCAN(eps=eps, min_samples=min_samples)
+    df['anomaly_db'] = dbscan.fit_predict(df_scaled)
+    anomalies = df[df['anomaly_db'] == -1]
+    return anomalies
+
+@st.cache_data(ttl="2h")
+def detect_anomalies_lof(df, feature_column, n_neighbors):
+    lof = LocalOutlierFactor(n_neighbors=n_neighbors, contamination=0.05)
+    df['anomaly_lof'] = lof.fit_predict(df[[feature_column]].dropna())
+    anomalies = df[df['anomaly_lof'] == -1]
     return anomalies
 #---------------------------------------------------------------------------------------------------------------------------------
 ### Main App
 #---------------------------------------------------------------------------------------------------------------------------------
 
-file = st.file_uploader("**:blue[Choose a file]**",type=["csv", "xls", "xlsx"], accept_multiple_files=False, key="file_upload")
-if file:
-    df = load_file(file)
+uploaded_file = st.file_uploader("**:blue[Choose a file]**",type=["csv", "xls", "xlsx"], accept_multiple_files=False, key="file_upload")
+if uploaded_file is not None:
+    df = load_data(uploaded_file)
     st.divider()
 
-    col1, col2 = st.columns((0.3,0.7))
+    st.sidebar.subheader('Select Target Variable')
+    target_variable = st.sidebar.selectbox("Select the target variable for anomaly detection", df.columns)
+
+    st.sidebar.subheader('Select Anomaly Detection Method')
+    ad_det_type = st.sidebar.selectbox("Select an Anomaly Detection Method", [
+        "Isolation Forest",
+        "Z-score",
+        "DBSCAN",
+        "LOF"
+    ])
+
+    if ad_det_type == "Z-score":
+        st.sidebar.subheader("Parameters")
+        zscore_threshold = st.sidebar.slider("Z-score Threshold", min_value=1, max_value=10, value=3)
+        anomalies = detect_anomalies_zscore(df, target_variable, threshold=zscore_threshold)
     
-    with col1:
+    elif ad_det_type == "Isolation Forest":
+        st.sidebar.subheader("Parameters")
+        n_estimators = st.sidebar.number_input("Number of trees in the forest", 100, 5000, step=10, key='n_estimators_ad')
+        contamination = st.sidebar.number_input("Proportion of outliers in the data set", 0.0, 0.1, 0.05, step=0.01, key='contamination_ad')
+        anomalies = detect_anomalies_isolation_forest(df, target_variable, n_estimators, contamination)
 
-        target_variable = st.selectbox("**Target (Dependent) Variable**", df.columns)
-        if target_variable:
-            
-            st.subheader("Method & Parameters", divider='blue')
-            ad_type = st.selectbox("**Select an Anomaly Detection Method**", [
-                                    "Isolation Forest",
-                                    "Z-score",
-                                    "DBSCAN",
-                                    "Local Outlier Factor (LOF)"])
-        
-            st.divider()
+    elif ad_det_type == "DBSCAN":
+        st.sidebar.subheader("Parameters")
+        eps = st.sidebar.slider("DBSCAN eps", 0.1, 10.0, 0.5)
+        min_samples = st.sidebar.slider("DBSCAN min_samples", 1, 50, 5)
+        anomalies = detect_anomalies_dbscan(df, target_variable, eps, min_samples)
 
-            if ad_type == "Isolation Forest":
+    elif ad_det_type == "LOF":
+        st.sidebar.subheader("Parameters")
+        n_neighbors = st.sidebar.slider("LOF n_neighbors", 1, 50, 20)
+        anomalies = detect_anomalies_lof(df, target_variable, n_neighbors)
+    
+    # Display anomalies
+    st.subheader("Detected Anomalies")
+    st.table(anomalies)
 
-                n_estimators = st.number_input("**The number of trees in the forest**", 100, 5000, step=10, key='n_estimators_ad')
-                contamination = st.number_input("**The proportion of outliers in the data set**", 0.0, 0.1, 0.05, step=0.01, key='contamination_ad')
+    # Plotting the data
+    st.subheader("Graph")
+    fig, ax = plt.subplots(figsize=(10, 4))
+    ax.plot(df.index, df[target_variable], label='Original Data', color='blue')
+    ax.scatter(anomalies.index, anomalies[target_variable], color='red', label='Anomalies')
+    ax.set_title('Anomaly Detection in Production Data')
+    ax.set_xlabel('Index')
+    ax.set_ylabel(target_variable)
+    ax.legend()
+    st.pyplot(fig)
 
-                with col2:
-
-                    st.subheader("Result & Visualizations", divider='blue')
-
-                    anomalies = anomalies_if(df[target_variable], n_estimators, contamination)
-                    st.warning("#### Anomalies Detected:")
-                    st.table(anomalies.head())
-
-                    st.divider()
 
 
