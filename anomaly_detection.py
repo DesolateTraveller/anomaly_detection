@@ -142,7 +142,7 @@ if uploaded_file is not None:
                 fig, ax = plt.subplots(figsize=(12, 6))
                 sns.lineplot(data=df, x=df.index, y=target_variable, label='Original Data', color='blue', ax=ax)
                 sns.scatterplot(data=anomalies, x=anomalies.index, y=target_variable, color='red', label='Anomalies', ax=ax)
-                ax.set_title('Anomaly Detection in Production Data')
+                ax.set_title('Anomaly Detection')
                 ax.set_xlabel('Index')
                 ax.set_ylabel(target_variable)
                 ax.legend()
