@@ -98,7 +98,7 @@ if uploaded_file is not None:
 
             st.subheader("Methods", divider='blue')    
 
-            target_variable = st.selectbox("target variable for anomaly detection", numerical_columns)
+            target_variable = st.selectbox("Target variable for anomaly detection", numerical_columns)
             #target_variable = st.selectbox("target variable for anomaly detection", df.columns)
 
             ad_det_type = st.selectbox("Anomaly Detection Method", [
@@ -139,13 +139,15 @@ if uploaded_file is not None:
                 st.table(anomalies.head())
 
                 st.subheader("Visualizations", divider='blue') 
-                fig, ax = plt.subplots(figsize=(10, 4))
-                ax.plot(df.index, df[target_variable], label='Original Data', color='blue')
-                ax.scatter(anomalies.index, anomalies[target_variable], color='red', label='Anomalies')
+                fig, ax = plt.subplots(figsize=(12, 6))
+                sns.lineplot(data=df, x=df.index, y=target_variable, label='Original Data', color='blue', ax=ax)
+                sns.scatterplot(data=anomalies, x=anomalies.index, y=target_variable, color='red', label='Anomalies', ax=ax)
                 ax.set_title('Anomaly Detection in Production Data')
                 ax.set_xlabel('Index')
                 ax.set_ylabel(target_variable)
                 ax.legend()
+                plt.xticks(rotation=45)
+                sns.despine()
                 st.pyplot(fig, use_container_width=True)
 
 
