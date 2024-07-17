@@ -87,9 +87,10 @@ if uploaded_file is not None:
         st.table(df.head(2))
     st.divider()
 
-    col1, col2 = st.columns((0.3,0.7))
+    col1, col2 = st.columns((0.2,0.8))
 
     with col1:
+
         st.subheader("Methods", divider='blue')    
         numerical_columns = get_numerical_columns(df)
         if not numerical_columns:
@@ -97,12 +98,13 @@ if uploaded_file is not None:
         else:
             target_variable = st.selectbox("target variable for anomaly detection", numerical_columns)
         #target_variable = st.selectbox("target variable for anomaly detection", df.columns)
+
         ad_det_type = st.selectbox("Anomaly Detection Method", [
-        "Isolation Forest",
-        "Z-score",
-        "DBSCAN",
-        "LOF"
-    ])
+                                    "Isolation Forest",
+                                    "Z-score",
+                                    "DBSCAN",
+                                    "LOF"
+                                    ])
         st.divider()
 
         if ad_det_type == "Z-score":
@@ -128,12 +130,13 @@ if uploaded_file is not None:
             anomalies = detect_anomalies_lof(df, target_variable, n_neighbors)
 
     with col2:
-        st.subheader("Output & Visualizations", divider='blue')    
 
-        st.warning("### Anomalies Detected:")
+        st.subheader("Output", divider='blue')    
+
+        st.warning("#### Anomalies Detected:")
         st.table(anomalies.head())
 
-        st.subheader("Graph")
+        st.subheader("Visualizations", divider='blue') 
         fig, ax = plt.subplots(figsize=(10, 4))
         ax.plot(df.index, df[target_variable], label='Original Data', color='blue')
         ax.scatter(anomalies.index, anomalies[target_variable], color='red', label='Anomalies')
@@ -142,6 +145,3 @@ if uploaded_file is not None:
         ax.set_ylabel(target_variable)
         ax.legend()
         st.pyplot(fig)
-
-
-
