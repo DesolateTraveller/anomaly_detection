@@ -17,6 +17,7 @@ from sklearn.svm import OneClassSVM
 from sklearn.cluster import DBSCAN
 from xgboost.sklearn import XGBClassifier
 #----------------------------------------
+from io import BytesIO
 from scipy.stats import zscore
 #----------------------------------------
 from pyod.models.ecod import ECOD
@@ -134,6 +135,62 @@ def convert_df_to_csv(df):
 ### Main App
 #---------------------------------------------------------------------------------------------------------------------------------
 
+# Knowledge Database
+with st.expander("**📚 Knowledge Database: Anomaly Detection Methods**", expanded=False):
+    st.markdown("""
+    <style>
+    .info-container {
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-left: 6px solid #3498db;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+    .info-container h3 {
+        color: #3498db;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    .info-container p {
+        color: #333;
+        margin: 5px 0;
+    }
+    .info-container ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    .info-container li {
+        margin: 10px 0;
+        display: flex;
+        align-items: center;
+    }
+    .info-container li:before {
+        content: "⭐";
+        margin-right: 10px;
+        color: #3498db;
+        font-size: 1.2em;
+    }
+    </style>
+    <div class="info-container">
+        <h3>🛠️ Anomaly Detection Methods</h3>
+        <ul>
+            <li><strong>Isolation Forest:</strong> A tree-based model that isolates observations by randomly selecting a feature and then randomly selecting a split value between the maximum and minimum values of the selected feature.</li>
+            <li><strong>Z-score:</strong> Detects anomalies by calculating the Z-score of observations, identifying those that deviate significantly from the mean.</li>
+            <li><strong>DBSCAN:</strong> A clustering-based method that groups together closely packed points and marks points in low-density regions as anomalies.</li>
+            <li><strong>Local Outlier Factor (LOF):</strong> Detects anomalies by measuring the local density deviation of a given data point with respect to its neighbors.</li>
+            <li><strong>Empirical Cumulative Outlier Detection (ECOD):</strong> Uses empirical distribution functions to detect anomalies.</li>
+            <li><strong>Histogram-Based Outlier Score (HBOS):</strong> Detects anomalies by creating histograms for the data and identifying points that fall into bins with low densities.</li>
+            <li><strong>Gaussian Mixture Models (GMM):</strong> Fits multiple Gaussian distributions to the data and identifies points with low probability densities as anomalies.</li>
+            <li><strong>One-Class Support Vector Machine (OCSVM):</strong> A SVM algorithm for anomaly detection that separates the normal data points from outliers by learning a decision function.</li>
+            <li><strong>Clustering-Based Local Outlier Factor (CBLOF):</strong> Combines clustering and LOF to detect anomalies by examining the local deviation of data points within clusters.</li>
+            <li><strong>Extreme Boosting Based Outlier Detection (XGBOD):</strong> Utilizes extreme gradient boosting techniques to detect anomalies.</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+
+#---------------------------------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------------------------------
 uploaded_file = st.file_uploader("**:blue[Choose a file]**",type=["csv", "xls", "xlsx"], accept_multiple_files=False, key="file_upload")
 if uploaded_file is not None:
     df = load_data(uploaded_file)
