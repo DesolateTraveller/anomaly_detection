@@ -212,6 +212,8 @@ if uploaded_file is not None:
 
                 st.warning("#### Anomalies Detected:")
                 st.table(anomalies.head())
+                st.divider()
+                st.write(anomalies.describe().T, use_container_width=True)
 
                 st.subheader("Visualizations", divider='blue') 
                 fig, ax = plt.subplots(figsize=(12, 6))
