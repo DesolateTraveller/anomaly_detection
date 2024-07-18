@@ -13,8 +13,16 @@ import seaborn as sns
 from sklearn.ensemble import IsolationForest
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import LocalOutlierFactor
+from sklearn.svm import OneClassSVM
 from sklearn.cluster import DBSCAN
+#----------------------------------------
 from scipy.stats import zscore
+#----------------------------------------
+from pyod.models.ecod import ECOD
+from pyod.models.hbos import HBOS
+from pyod.models.gmm import GMM
+from pyod.models.cblof import CBLOF
+from pyod.models.xgbod import XGBOD
 #---------------------------------------------------------------------------------------------------------------------------------
 ### Title and description for your Streamlit app
 #---------------------------------------------------------------------------------------------------------------------------------
@@ -72,6 +80,48 @@ def detect_anomalies_lof(df, feature_column, n_neighbors):
     return anomalies
 
 @st.cache_data(ttl="2h")
+def detect_anomalies_ecod(df, feature_column):
+    model = ECOD()
+    model.fit(df[[feature_column]].dropna())
+    anomalies = df[model.labels_ == 1]
+    return anomalies
+
+@st.cache_data(ttl="2h")
+def detect_anomalies_hbos(df, feature_column):
+    model = HBOS()
+    model.fit(df[[feature_column]].dropna())
+    anomalies = df[model.labels_ == 1]
+    return anomalies
+
+@st.cache_data(ttl="2h")
+def detect_anomalies_gmm(df, feature_column):
+    model = GMM()
+    model.fit(df[[feature_column]].dropna())
+    anomalies = df[model.labels_ == 1]
+    return anomalies
+
+@st.cache_data(ttl="2h")
+def detect_anomalies_ocsvm(df, feature_column):
+    model = OneClassSVM(gamma='auto')
+    model.fit(df[[feature_column]].dropna())
+    anomalies = df[model.predict(df[[feature_column]].dropna()) == -1]
+    return anomalies
+
+@st.cache_data(ttl="2h")
+def detect_anomalies_cblof(df, feature_column):
+    model = CBLOF()
+    model.fit(df[[feature_column]].dropna())
+    anomalies = df[model.labels_ == 1]
+    return anomalies
+
+@st.cache_data(ttl="2h")
+def detect_anomalies_xgbod(df, feature_column):
+    model = XGBOD()
+    model.fit(df[[feature_column]].dropna())
+    anomalies = df[model.labels_ == 1]
+    return anomalies
+
+@st.cache_data(ttl="2h")
 def get_numerical_columns(df):
     numerical_cols = df.select_dtypes(include=np.number).columns.tolist()
     return numerical_cols
@@ -105,7 +155,13 @@ if uploaded_file is not None:
                                     "Isolation Forest",
                                     "Z-score",
                                     "DBSCAN",
-                                    "LOF"
+                                    "Local Outlier factor (LOF)",
+                                    "ECOD",
+                                    "HBOS",
+                                    "GMM",
+                                    "OCSVM",
+                                    "CBLOF",
+                                    "XGBOD"
                                     ])
             st.divider()
 
@@ -126,10 +182,28 @@ if uploaded_file is not None:
                 min_samples = st.slider("DBSCAN min_samples", 1, 50, 5)
                 anomalies = detect_anomalies_dbscan(df, target_variable, eps, min_samples)
 
-            elif ad_det_type == "LOF":
+            elif ad_det_type == "Local Outlier factor (LOF)":
                 st.subheader("Parameters", divider='blue')  
                 n_neighbors = st.slider("LOF n_neighbors", 1, 50, 20)
                 anomalies = detect_anomalies_lof(df, target_variable, n_neighbors)
+
+            elif ad_det_type == "ECOD":
+                anomalies = detect_anomalies_ecod(df, target_variable)
+
+            elif ad_det_type == "HBOS":
+                anomalies = detect_anomalies_hbos(df, target_variable)
+
+            elif ad_det_type == "GMM":
+                anomalies = detect_anomalies_gmm(df, target_variable)
+
+            elif ad_det_type == "OCSVM":
+                anomalies = detect_anomalies_ocsvm(df, target_variable)
+
+            elif ad_det_type == "CBLOF":
+                anomalies = detect_anomalies_cblof(df, target_variable)
+
+            elif ad_det_type == "XGBOD":
+                anomalies = detect_anomalies_xgbod(df, target_variable)
 
             with col2:
 
