@@ -137,7 +137,7 @@ if uploaded_file is not None:
     with stats_expander:  
         st.table(df.head(2))
         st.divider()
-        st.write(df.describe().T, use_container_width=True)
+        st.write(df.shape[0], use_container_width=True)
     st.divider()
 
     numerical_columns = get_numerical_columns(df)
@@ -228,5 +228,6 @@ if uploaded_file is not None:
                 plt.xticks(rotation=45)
                 sns.despine()
                 st.pyplot(fig, use_container_width=True)
+
 
 
