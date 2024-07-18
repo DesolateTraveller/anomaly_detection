@@ -215,7 +215,7 @@ if uploaded_file is not None:
                 st.warning("#### Anomalies Detected:")
                 st.table(anomalies.head())
 
-                st.write("No of rows having anomaly : ",df.shape[0], use_container_width=True)
+                st.write("No of rows having anomaly : ",anomalies.shape[0], use_container_width=True)
                 st.divider()
 
                 st.subheader("Visualizations", divider='blue') 
@@ -229,6 +229,4 @@ if uploaded_file is not None:
                 plt.xticks(rotation=45)
                 sns.despine()
                 st.pyplot(fig, use_container_width=True)
-
-
 
