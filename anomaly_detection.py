@@ -159,12 +159,12 @@ if uploaded_file is not None:
                                     "Z-score",
                                     "DBSCAN",
                                     "Local Outlier factor (LOF)",
-                                    "ECOD",
-                                    "HBOS",
-                                    "GMM",
-                                    "OCSVM",
-                                    "CBLOF",
-                                    "XGBOD"
+                                    "Empirical Cumulative Outlier Detection (ECOD)",
+                                    "Histogram Based Outlier Score (HBOS)",
+                                    "Gaussian Mixture Models (GMM)",
+                                    "One Class Support Vector Machine (OCSVM)",
+                                    "Clustering based Local Outlier Factor (CBLOF)",
+                                    "Extreme Boosting Based Outlier Detection (XGBOD)"
                                     ])
             st.divider()
 
@@ -190,22 +190,22 @@ if uploaded_file is not None:
                 n_neighbors = st.slider("LOF n_neighbors", 1, 50, 20)
                 anomalies = detect_anomalies_lof(df, target_variable, n_neighbors)
 
-            elif ad_det_type == "ECOD":
+            elif ad_det_type == "Empirical Cumulative Outlier Detection (ECOD)":
                 anomalies = detect_anomalies_ecod(df, target_variable)
 
-            elif ad_det_type == "HBOS":
+            elif ad_det_type == "Histogram Based Outlier Score (HBOS)":
                 anomalies = detect_anomalies_hbos(df, target_variable)
 
-            elif ad_det_type == "GMM":
+            elif ad_det_type == "Gaussian Mixture Models (GMM)":
                 anomalies = detect_anomalies_gmm(df, target_variable)
 
-            elif ad_det_type == "OCSVM":
+            elif ad_det_type == "One Class Support Vector Machine (OCSVM)":
                 anomalies = detect_anomalies_ocsvm(df, target_variable)
 
-            elif ad_det_type == "CBLOF":
+            elif ad_det_type == "Clustering based Local Outlier Factor (CBLOF)":
                 anomalies = detect_anomalies_cblof(df, target_variable)
 
-            elif ad_det_type == "XGBOD":
+            elif ad_det_type == "Extreme Boosting Based Outlier Detection (XGBOD)":
                 anomalies = detect_anomalies_xgbod(df, target_variable)
 
             with col2:
@@ -214,8 +214,9 @@ if uploaded_file is not None:
 
                 st.warning("#### Anomalies Detected:")
                 st.table(anomalies.head())
-                st.divider()
+
                 st.write("No of rows having anomaly : ",df.shape[0], use_container_width=True)
+                st.divider()
 
                 st.subheader("Visualizations", divider='blue') 
                 fig, ax = plt.subplots(figsize=(12, 6))
@@ -228,6 +229,4 @@ if uploaded_file is not None:
                 plt.xticks(rotation=45)
                 sns.despine()
                 st.pyplot(fig, use_container_width=True)
-
-
 
