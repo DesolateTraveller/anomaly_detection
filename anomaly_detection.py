@@ -15,6 +15,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import LocalOutlierFactor
 from sklearn.svm import OneClassSVM
 from sklearn.cluster import DBSCAN
+from xgboost.sklearn import XGBClassifier
 #----------------------------------------
 from scipy.stats import zscore
 #----------------------------------------
@@ -223,6 +224,4 @@ if uploaded_file is not None:
                 plt.xticks(rotation=45)
                 sns.despine()
                 st.pyplot(fig, use_container_width=True)
-
-
 
