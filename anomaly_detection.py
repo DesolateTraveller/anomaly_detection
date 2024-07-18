@@ -220,8 +220,8 @@ if uploaded_file is not None:
                 st.table(anomalies.head())
 
                 st.write("No of rows having anomaly : ",anomalies.shape[0], use_container_width=True)
-                anomalies = convert_df_to_csv(anomalies)
-                st.download_button(label="📥 Download Anomalies CSV",data=anomalies,file_name='anomalies.csv',mime='text/csv')
+                csv = convert_df_to_csv(anomalies)
+                st.download_button(label="📥 Download Anomalies CSV",data=csv,file_name='anomalies.csv',mime='text/csv')
                 st.divider()
 
                 st.subheader("Visualizations", divider='blue') 
