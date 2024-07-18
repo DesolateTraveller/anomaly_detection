@@ -194,7 +194,7 @@ with st.expander("**📚 Knowledge Database: Anomaly Detection Methods**", expan
 uploaded_file = st.file_uploader("**:blue[Choose a file]**",type=["csv", "xls", "xlsx"], accept_multiple_files=False, key="file_upload")
 if uploaded_file is not None:
     df = load_data(uploaded_file)
-    stats_expander = st.expander("**Preview of Information**", expanded=True)
+    stats_expander = st.expander("**Preview of Information**", expanded=False)
     with stats_expander:  
         st.table(df.head(2))
         st.divider()
