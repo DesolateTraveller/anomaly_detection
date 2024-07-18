@@ -92,7 +92,7 @@ if uploaded_file is not None:
         st.warning("No numerical columns found in the uploaded file.")
 
     else:
-        col1, col2 = st.columns((0.2,0.8))
+        col1, col2 = st.columns((0.1,0.9))
 
         with col1:
 
