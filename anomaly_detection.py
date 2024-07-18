@@ -126,6 +126,10 @@ def detect_anomalies_xgbod(df, feature_column):
 def get_numerical_columns(df):
     numerical_cols = df.select_dtypes(include=np.number).columns.tolist()
     return numerical_cols
+
+@st.cache_data(ttl="2h")
+def convert_df_to_csv(df):
+    return df.to_csv(index=False).encode('utf-8')
 #---------------------------------------------------------------------------------------------------------------------------------
 ### Main App
 #---------------------------------------------------------------------------------------------------------------------------------
@@ -216,6 +220,7 @@ if uploaded_file is not None:
                 st.table(anomalies.head())
 
                 st.write("No of rows having anomaly : ",anomalies.shape[0], use_container_width=True)
+                anomalies = convert_df_to_csv(anomalies)
                 st.download_button(label="📥 Download Anomalies CSV",data=anomalies,file_name='anomalies.csv',mime='text/csv')
                 st.divider()
 
