@@ -145,7 +145,7 @@ if uploaded_file is not None:
         st.warning("No numerical columns found in the uploaded file.")
 
     else:
-        col1, col2 = st.columns((0.15,0.85))
+        col1, col2 = st.columns((0.17,0.83))
 
         with col1:
 
@@ -229,4 +229,6 @@ if uploaded_file is not None:
                 plt.xticks(rotation=45)
                 sns.despine()
                 st.pyplot(fig, use_container_width=True)
+
+
 
