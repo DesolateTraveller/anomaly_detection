@@ -31,11 +31,13 @@ from pyod.models.xgbod import XGBOD
 #import custom_style()
 st.set_page_config(page_title="Anomaly Detection",
                    layout="wide",
-                   #page_icon=               
+                   page_icon='https://www.clariant.com/images/clariant-logo-small.svg',             
                    initial_sidebar_state="collapsed")
 #----------------------------------------
 st.title(f""":rainbow[Anomaly Detection | v0.1]""")
-st.markdown('Created by | <a href="mailto:avijit.mba18@gmail.com">Avijit Chakraborty</a>', 
+#st.markdown('Created by | <a href="mailto:avijit.mba18@gmail.com">Avijit Chakraborty</a>', 
+            #unsafe_allow_html=True)
+st.markdown('Developed by : **:blue[E&PT - Digital Solutions]** | prepared by : <a href="mailto:avijit.chakraborty@clariant.com">Avijit Chakraborty</a>', 
             unsafe_allow_html=True)
 #t.info('**Disclaimer : :blue[Thank you for visiting the app] | Unauthorized uses or copying of the app is strictly prohibited | Click the :blue[sidebar] to follow the instructions to start the applications.**', icon="ℹ️")
 #----------------------------------------
@@ -212,10 +214,10 @@ if uploaded_file is not None:
 
             st.subheader("Methods", divider='blue')    
 
-            target_variable = st.selectbox("Target variable for anomaly detection", numerical_columns)
+            target_variable = st.selectbox("**Target variable for anomaly detection**", numerical_columns)
             #target_variable = st.selectbox("target variable for anomaly detection", df.columns)
 
-            ad_det_type = st.selectbox("Anomaly Detection Method", [
+            ad_det_type = st.selectbox("Select a Anomaly Detection Method", [
                                     "Isolation Forest",
                                     "Z-score",
                                     "DBSCAN",
