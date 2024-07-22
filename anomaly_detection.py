@@ -213,11 +213,11 @@ if uploaded_file is not None:
         with col1:
 
             st.subheader("Methods", divider='blue')    
-            st.write("No of rows before anomaly detection : ",df.shape[0], use_container_width=True)
+            st.write("**No of rows before anomaly detection :**",df.shape[0], use_container_width=True)
             target_variable = st.selectbox("**Target variable for anomaly detection**", numerical_columns)
             #target_variable = st.selectbox("target variable for anomaly detection", df.columns)
 
-            ad_det_type = st.selectbox("Select a Anomaly Detection Method", [
+            ad_det_type = st.selectbox("**Select a Anomaly Detection Method**", [
                                     "Isolation Forest",
                                     "Z-score",
                                     "DBSCAN",
