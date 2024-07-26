@@ -34,7 +34,7 @@ st.set_page_config(page_title="Anomaly Detection",
                    #page_icon='https://www.clariant.com/images/clariant-logo-small.svg',             
                    initial_sidebar_state="collapsed")
 #----------------------------------------
-st.title(f""":rainbow[Anomaly Detection | v1.0]""")
+st.title(f""":rainbow[Anomaly Detection | v0.1]""")
 #st.markdown('Created by | <a href="mailto:avijit.mba18@gmail.com">Avijit Chakraborty</a>', 
             #unsafe_allow_html=True)
 st.markdown('Developed by : **:blue[E&PT - Digital Solutions]** | prepared by : <a href="mailto:avijit.chakraborty@clariant.com">Avijit Chakraborty</a>', 
