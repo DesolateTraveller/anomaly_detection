@@ -29,12 +29,12 @@ from pyod.models.xgbod import XGBOD
 ### Title and description for your Streamlit app
 #---------------------------------------------------------------------------------------------------------------------------------
 #import custom_style()
-st.set_page_config(page_title="Anomaly Detection",
+st.set_page_config(page_title="Anomaly Detection | v0.1",
                    layout="wide",
                    page_icon= "📊",             
                    initial_sidebar_state="collapsed")
 #----------------------------------------
-st.title(f""":rainbow[Anomaly Detection | v0.1]""")
+st.title(f""":rainbow[Anomaly Detection]""")
 st.markdown(
     '''
     Created by | <a href="mailto:avijit.mba18@gmail.com">Avijit Chakraborty</a> ( 📑 [Resume](https://resume-avijitc.streamlit.app/) | :bust_in_silhouette: [LinkedIn](https://www.linkedin.com/in/avijit2403/) | :computer: [GitHub](https://github.com/DesolateTraveller) ) |
