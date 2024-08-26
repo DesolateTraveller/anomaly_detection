@@ -31,14 +31,16 @@ from pyod.models.xgbod import XGBOD
 #import custom_style()
 st.set_page_config(page_title="Anomaly Detection",
                    layout="wide",
-                   #page_icon='https://www.clariant.com/images/clariant-logo-small.svg',             
+                   page_icon= "📊",             
                    initial_sidebar_state="collapsed")
 #----------------------------------------
 st.title(f""":rainbow[Anomaly Detection | v0.1]""")
-#st.markdown('Created by | <a href="mailto:avijit.mba18@gmail.com">Avijit Chakraborty</a>', 
-            #unsafe_allow_html=True)
-st.markdown('Developed by : **:blue[E&PT - Digital Solutions]** | prepared by : <a href="mailto:avijit.chakraborty@clariant.com">Avijit Chakraborty</a>', 
-            unsafe_allow_html=True)
+st.markdown(
+    '''
+    Created by | <a href="mailto:avijit.mba18@gmail.com">Avijit Chakraborty</a> ( 📑 [Resume](https://resume-avijitc.streamlit.app/) | :bust_in_silhouette: [LinkedIn](https://www.linkedin.com/in/avijit2403/) | :computer: [GitHub](https://github.com/DesolateTraveller) ) |
+    for best view of the app, please **zoom-out** the browser to **75%**.
+    ''',
+    unsafe_allow_html=True))
 #t.info('**Disclaimer : :blue[Thank you for visiting the app] | Unauthorized uses or copying of the app is strictly prohibited | Click the :blue[sidebar] to follow the instructions to start the applications.**', icon="ℹ️")
 #----------------------------------------
 # Set the background image
