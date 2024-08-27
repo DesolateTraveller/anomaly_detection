@@ -31,7 +31,7 @@ from pyod.models.xgbod import XGBOD
 #import custom_style()
 st.set_page_config(page_title="Anomaly Detection | v0.1",
                    layout="wide",
-                   page_icon= "📊",             
+                   page_icon= "📈",             
                    initial_sidebar_state="collapsed")
 #----------------------------------------
 st.title(f""":rainbow[Anomaly Detection]""")
