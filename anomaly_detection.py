@@ -274,8 +274,8 @@ with col1:
             else:    
                 
                 st.markdown('<div class="centered-info"><span style="margin-left: 10px;">Methods</span></div>',unsafe_allow_html=True,)
-                target_variable = st.selectbox("**Target variable for anomaly detection**", numerical_columns)
-                ad_det_type = st.selectbox("**Select a Anomaly Detection Method**", [
+                target_variable = st.selectbox("**:blue[Target variable]**", numerical_columns)
+                ad_det_type = st.selectbox("**:blue[Select a Anomaly Detection Method]**", [
                                     "Isolation Forest",
                                     "Z-score",
                                     "DBSCAN",
