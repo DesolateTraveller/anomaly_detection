@@ -89,7 +89,24 @@ st.markdown(
     """,
     unsafe_allow_html=True)
 #----------------------------------------
-
+st.markdown(
+            """
+            <style>
+                .centered-info {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-weight: bold;
+                font-size: 15px;
+                color: #007BFF; 
+                padding: 5px;
+                background-color: #E8F4FF; 
+                border-radius: 5px;
+                border: 1px solid #007BFF;
+                margin-top: 5px;
+                }
+            </style>
+            """,unsafe_allow_html=True,)
 #---------------------------------------------------------------------------------------------------------------------------------
 ### Functions & Definitions
 #---------------------------------------------------------------------------------------------------------------------------------
@@ -240,30 +257,24 @@ with st.popover("**:red[📚 Knowledge Database: Anomaly Detection Methods]**", 
 #st.divider()
 #---------------------------------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------------------------------
-uploaded_file = st.file_uploader("**:blue[Choose a file]**",type=["csv", "xls", "xlsx"], accept_multiple_files=False, key="file_upload")
-if uploaded_file is not None:
-    df = load_data(uploaded_file)
-    stats_expander = st.expander("**:blue[Preview of Information]**", expanded=False)
-    with stats_expander:  
-        st.table(df.head(2))
-        
-    st.divider()
 
-    numerical_columns = get_numerical_columns(df)
-    if not numerical_columns:
-        st.warning("No numerical columns found in the uploaded file.")
+col1, col2 = st.columns((0.2,0.8))
+with col1: 
+    with st.container(border=True):
 
-    else:
-        col1, col2 = st.columns((0.17,0.83))
+        uploaded_file = st.file_uploader("**:blue[Choose a file]**",type=["csv", "xls", "xlsx"], accept_multiple_files=False, key="file_upload")
+        if uploaded_file is not None:
+            df = load_data(uploaded_file)
 
-        with col1:
-
-            st.subheader("Methods", divider='blue')    
-            st.write("No of rows before anomaly detection :",df.shape[0], use_container_width=True)
-            target_variable = st.selectbox("**Target variable for anomaly detection**", numerical_columns)
-            #target_variable = st.selectbox("target variable for anomaly detection", df.columns)
-
-            ad_det_type = st.selectbox("**Select a Anomaly Detection Method**", [
+            numerical_columns = get_numerical_columns(df)
+            if not numerical_columns:
+                st.warning("No numerical columns found in the uploaded file.")
+                
+            else:    
+                
+                st.markdown('<div class="centered-info"><span style="margin-left: 10px;">Methods</span></div>',unsafe_allow_html=True,)
+                target_variable = st.selectbox("**Target variable for anomaly detection**", numerical_columns)
+                ad_det_type = st.selectbox("**Select a Anomaly Detection Method**", [
                                     "Isolation Forest",
                                     "Z-score",
                                     "DBSCAN",
@@ -275,72 +286,71 @@ if uploaded_file is not None:
                                     "Clustering based Local Outlier Factor (CBLOF)",
                                     "Extreme Boosting Based Outlier Detection (XGBOD)"
                                     ])
-            st.divider()
-
-            if ad_det_type == "Z-score":
-                st.subheader("Parameters", divider='blue')    
-                zscore_threshold = st.slider("Z-score Threshold", min_value=1, max_value=10, value=3)
-                anomalies = detect_anomalies_zscore(df, target_variable, threshold=zscore_threshold)
+                
+                st.markdown('<div class="centered-info"><span style="margin-left: 10px;">Parameters</span></div>',unsafe_allow_html=True,)
+                
+                if ad_det_type == "Z-score":  
+                    zscore_threshold = st.slider("Z-score Threshold", min_value=1, max_value=10, value=3)
+                    anomalies = detect_anomalies_zscore(df, target_variable, threshold=zscore_threshold)
     
-            elif ad_det_type == "Isolation Forest":
-                st.subheader("Parameters", divider='blue')  
-                n_estimators = st.number_input("Number of trees in the forest", 100, 5000, step=10, key='n_estimators_ad')
-                contamination = st.number_input("Proportion of outliers in the data set", 0.0, 0.1, 0.05, step=0.01, key='contamination_ad')
-                anomalies = detect_anomalies_isolation_forest(df, target_variable, n_estimators, contamination)
+                elif ad_det_type == "Isolation Forest":
+                    n_estimators = st.number_input("Number of trees in the forest", 100, 5000, step=10, key='n_estimators_ad')
+                    contamination = st.number_input("Proportion of outliers in the data set", 0.0, 0.1, 0.05, step=0.01, key='contamination_ad')
+                    anomalies = detect_anomalies_isolation_forest(df, target_variable, n_estimators, contamination)
 
-            elif ad_det_type == "DBSCAN":
-                st.subheader("Parameters", divider='blue')  
-                eps = st.slider("DBSCAN eps", 0.1, 10.0, 0.5)
-                min_samples = st.slider("DBSCAN min_samples", 1, 50, 5)
-                anomalies = detect_anomalies_dbscan(df, target_variable, eps, min_samples)
+                elif ad_det_type == "DBSCAN": 
+                    eps = st.slider("DBSCAN eps", 0.1, 10.0, 0.5)
+                    min_samples = st.slider("DBSCAN min_samples", 1, 50, 5)
+                    anomalies = detect_anomalies_dbscan(df, target_variable, eps, min_samples)
 
-            elif ad_det_type == "Local Outlier factor (LOF)":
-                st.subheader("Parameters", divider='blue')  
-                n_neighbors = st.slider("LOF n_neighbors", 1, 50, 20)
-                anomalies = detect_anomalies_lof(df, target_variable, n_neighbors)
+                elif ad_det_type == "Local Outlier factor (LOF)": 
+                    n_neighbors = st.slider("LOF n_neighbors", 1, 50, 20)
+                    anomalies = detect_anomalies_lof(df, target_variable, n_neighbors)
 
-            elif ad_det_type == "Empirical Cumulative Outlier Detection (ECOD)":
-                anomalies = detect_anomalies_ecod(df, target_variable)
+                elif ad_det_type == "Empirical Cumulative Outlier Detection (ECOD)":
+                    anomalies = detect_anomalies_ecod(df, target_variable)
 
-            elif ad_det_type == "Histogram Based Outlier Score (HBOS)":
-                anomalies = detect_anomalies_hbos(df, target_variable)
+                elif ad_det_type == "Histogram Based Outlier Score (HBOS)":
+                    anomalies = detect_anomalies_hbos(df, target_variable)
 
-            elif ad_det_type == "Gaussian Mixture Models (GMM)":
-                anomalies = detect_anomalies_gmm(df, target_variable)
+                elif ad_det_type == "Gaussian Mixture Models (GMM)":
+                    anomalies = detect_anomalies_gmm(df, target_variable)
 
-            elif ad_det_type == "One Class Support Vector Machine (OCSVM)":
-                anomalies = detect_anomalies_ocsvm(df, target_variable)
+                elif ad_det_type == "One Class Support Vector Machine (OCSVM)":
+                    anomalies = detect_anomalies_ocsvm(df, target_variable)
 
-            elif ad_det_type == "Clustering based Local Outlier Factor (CBLOF)":
-                anomalies = detect_anomalies_cblof(df, target_variable)
+                elif ad_det_type == "Clustering based Local Outlier Factor (CBLOF)":
+                    anomalies = detect_anomalies_cblof(df, target_variable)
 
-            elif ad_det_type == "Extreme Boosting Based Outlier Detection (XGBOD)":
-                anomalies = detect_anomalies_xgbod(df, target_variable)
+                elif ad_det_type == "Extreme Boosting Based Outlier Detection (XGBOD)":
+                    anomalies = detect_anomalies_xgbod(df, target_variable)
+            
+                with col2:
+                    with st.container(border=True):
+                        
+                        st.markdown('<div class="centered-info"><span style="margin-left: 10px;">Previews of Basic Informations</span></div>',unsafe_allow_html=True,)
+                        st.table(df.head(2))
+                        st.write("No of rows before anomaly detection :",df.shape[0], use_container_width=True)
+       
+                        st.markdown('<div class="centered-info"><span style="margin-left: 10px;">Anomaliess</span></div>',unsafe_allow_html=True,)
+                        st.warning("#### Anomalies Detected:")
+                        st.write("No of rows having anomaly : ",anomalies.shape[0], use_container_width=True)
+                        st.table(anomalies.head(3))
+                        csv = convert_df_to_csv(anomalies)
+                        st.download_button(label="📥 Download Anomalies CSV",data=csv,file_name='anomalies.csv',mime='text/csv')
 
-            with col2:
 
-                st.subheader("Output", divider='blue')    
-
-                st.warning("#### Anomalies Detected:")
-                st.write("No of rows having anomaly : ",anomalies.shape[0], use_container_width=True)
-                st.table(anomalies.head(3))
-
-
-                csv = convert_df_to_csv(anomalies)
-                st.download_button(label="📥 Download Anomalies CSV",data=csv,file_name='anomalies.csv',mime='text/csv')
-                st.divider()
-
-                st.subheader("Visualizations", divider='blue') 
-                fig, ax = plt.subplots(figsize=(12, 6))
-                sns.lineplot(data=df, x=df.index, y=target_variable, label='Original Data', color='blue', ax=ax)
-                sns.scatterplot(data=anomalies, x=anomalies.index, y=target_variable, color='red', label='Anomalies', ax=ax)
-                ax.set_title('Anomaly Detection')
-                ax.set_xlabel('Index')
-                ax.set_ylabel(target_variable)
-                ax.legend()
-                plt.xticks(rotation=45)
-                sns.despine()
-                st.pyplot(fig, use_container_width=True)
+                        st.markdown('<div class="centered-info"><span style="margin-left: 10px;">Visualizations</span></div>',unsafe_allow_html=True,)
+                        fig, ax = plt.subplots(figsize=(12, 6))
+                        sns.lineplot(data=df, x=df.index, y=target_variable, label='Original Data', color='blue', ax=ax)
+                        sns.scatterplot(data=anomalies, x=anomalies.index, y=target_variable, color='red', label='Anomalies', ax=ax)
+                        ax.set_title('Anomaly Detection')
+                        ax.set_xlabel('Index')
+                        ax.set_ylabel(target_variable)
+                        ax.legend()
+                        plt.xticks(rotation=45)
+                        sns.despine()
+                        st.pyplot(fig, use_container_width=True)
 
 
 
