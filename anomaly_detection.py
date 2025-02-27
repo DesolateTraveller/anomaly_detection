@@ -104,6 +104,7 @@ st.markdown(
                 border-radius: 5px;
                 border: 1px solid #007BFF;
                 margin-top: 5px;
+                margin-bottom: 5px;
                 }
             </style>
             """,unsafe_allow_html=True,)
