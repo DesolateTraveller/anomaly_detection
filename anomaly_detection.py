@@ -29,22 +29,66 @@ from pyod.models.xgbod import XGBOD
 ### Title and description for your Streamlit app
 #---------------------------------------------------------------------------------------------------------------------------------
 #import custom_style()
-st.set_page_config(page_title="Anomaly Detection | v0.1",
+st.set_page_config(page_title="Anomaly Detection | v0.2",
                    layout="wide",
                    page_icon= "📈",             
                    initial_sidebar_state="collapsed")
 #----------------------------------------
-st.title(f""":rainbow[Anomaly Detection]""")
 st.markdown(
-    '''
-    Created by | <a href="mailto:avijit.mba18@gmail.com">Avijit Chakraborty</a> ( 📑 [Resume](https://resume-avijitc.streamlit.app/) | :bust_in_silhouette: [LinkedIn](https://www.linkedin.com/in/avijit2403/) | :computer: [GitHub](https://github.com/DesolateTraveller) ) |
-    for best view of the app, please **zoom-out** the browser to **75%**.
-    ''',
-    unsafe_allow_html=True)
-#t.info('**Disclaimer : :blue[Thank you for visiting the app] | Unauthorized uses or copying of the app is strictly prohibited | Click the :blue[sidebar] to follow the instructions to start the applications.**', icon="ℹ️")
+    """
+    <style>
+    .title-large {
+        text-align: center;
+        font-size: 35px;
+        font-weight: bold;
+        background: linear-gradient(to left, red, orange, blue, indigo, violet);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .title-small {
+        text-align: center;
+        font-size: 20px;
+        background: linear-gradient(to left, red, orange, blue, indigo, violet);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    </style>
+    <div class="title-large">Anomaly Detection</div>
+    <div class="title-small">Play with Abnormalities | v0.2</div>
+    """,
+    unsafe_allow_html=True
+)
 #----------------------------------------
-# Set the background image
-st.divider()
+st.markdown(
+    """
+    <style>
+    .footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        background-color: #F0F2F6;
+        text-align: center;
+        padding: 10px;
+        font-size: 14px;
+        color: #333;
+        z-index: 100;
+    }
+    .footer p {
+        margin: 0;
+    }
+    .footer .highlight {
+        font-weight: bold;
+        color: blue;
+    }
+    </style>
+
+    <div class="footer">
+        <p>© 2025 | Created by : <span class="highlight">Avijit Chakraborty</span> | <a href="mailto:avijit.mba18@gmail.com"> 📩 </a></p>  <span class="highlight">Thank you for visiting the app | Unauthorized uses or copying is strictly prohibited | For best view of the app, please zoom out the browser to 75%.</span>
+    </div>
+    """,
+    unsafe_allow_html=True)
+#----------------------------------------
 
 #---------------------------------------------------------------------------------------------------------------------------------
 ### Functions & Definitions
@@ -140,7 +184,8 @@ def convert_df_to_csv(df):
 #---------------------------------------------------------------------------------------------------------------------------------
 
 # Knowledge Database
-with st.expander("**📚 Knowledge Database: Anomaly Detection Methods**", expanded=False):
+with st.popover("**:red[📚 Knowledge Database: Anomaly Detection Methods]**", disabled=False, use_container_width=True): 
+#with st.expander("**:blue[📚 Knowledge Database: Anomaly Detection Methods]**", expanded=False):
     st.markdown("""
     <style>
     .info-container {
@@ -192,13 +237,13 @@ with st.expander("**📚 Knowledge Database: Anomaly Detection Methods**", expan
         </ul>
     </div>
     """, unsafe_allow_html=True)
-
+#st.divider()
 #---------------------------------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------------------------------
 uploaded_file = st.file_uploader("**:blue[Choose a file]**",type=["csv", "xls", "xlsx"], accept_multiple_files=False, key="file_upload")
 if uploaded_file is not None:
     df = load_data(uploaded_file)
-    stats_expander = st.expander("**Preview of Information**", expanded=False)
+    stats_expander = st.expander("**:blue[Preview of Information]**", expanded=False)
     with stats_expander:  
         st.table(df.head(2))
         
