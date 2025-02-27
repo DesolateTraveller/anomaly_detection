@@ -333,7 +333,7 @@ with col1:
                         st.table(df.head(2))
                         st.write("No of rows before anomaly detection :",df.shape[0], use_container_width=True)
        
-                        st.markdown('<div class="centered-info"><span style="margin-left: 10px;">Anomaliess</span></div>',unsafe_allow_html=True,)
+                        st.markdown('<div class="centered-info"><span style="margin-left: 10px;">Anomalies</span></div>',unsafe_allow_html=True,)
                         st.warning("#### Anomalies Detected:")
                         st.write("No of rows having anomaly : ",anomalies.shape[0], use_container_width=True)
                         st.table(anomalies.head(3))
@@ -352,6 +352,4 @@ with col1:
                         plt.xticks(rotation=45)
                         sns.despine()
                         st.pyplot(fig, use_container_width=True)
-
-
 
