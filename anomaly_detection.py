@@ -275,11 +275,11 @@ with col1:
                 
                 #st.markdown('<div class="centered-info"><span style="margin-left: 10px;">Methods</span></div>',unsafe_allow_html=True,)
                 st.divider()
-                target_variable = st.selectbox("**:blue[Target variable]**", numerical_columns)
+                target_variable = st.selectbox("**:blue[Target variable (for anomaly detection)]**", numerical_columns)
                 st.divider()
                 
                 st.markdown('<div class="centered-info"><span style="margin-left: 10px;">Methods & Parameters</span></div>',unsafe_allow_html=True,)
-                ad_det_type = st.selectbox("**:blue[Select a Anomaly Detection Method]**", [
+                ad_det_type = st.selectbox("", [
                                     "Isolation Forest",
                                     "Z-score",
                                     "DBSCAN",
