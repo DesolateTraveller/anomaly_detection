@@ -29,7 +29,7 @@ from pyod.models.xgbod import XGBOD
 ### Title and description for your Streamlit app
 #---------------------------------------------------------------------------------------------------------------------------------
 #import custom_style()
-st.set_page_config(page_title="Anomaly Detection | v0.2",
+st.set_page_config(page_title="Anomaly Detection | v0.3",
                    layout="wide",
                    page_icon= "📈",             
                    initial_sidebar_state="collapsed")
@@ -54,7 +54,7 @@ st.markdown(
     }
     </style>
     <div class="title-large">Anomaly Detection</div>
-    <div class="title-small">Play with Abnormalities | v0.2</div>
+    <div class="title-small">Play with Abnormalities | v0.3</div>
     """,
     unsafe_allow_html=True
 )
@@ -240,7 +240,7 @@ with st.popover("**:red[📚 Knowledge Database: Anomaly Detection Methods]**", 
     }
     </style>
     <div class="info-container">
-        <h3>🛠️ Anomaly Detection Methods</h3>
+        <h4>🛠️ Anomaly Detection Methods</h4>
         <ul>
             <li><strong>Isolation Forest:</strong> A tree-based model that isolates observations by randomly selecting a feature and then randomly selecting a split value between the maximum and minimum values of the selected feature.</li>
             <li><strong>Z-score:</strong> Detects anomalies by calculating the Z-score of observations, identifying those that deviate significantly from the mean.</li>
@@ -273,8 +273,12 @@ with col1:
                 
             else:    
                 
-                st.markdown('<div class="centered-info"><span style="margin-left: 10px;">Methods</span></div>',unsafe_allow_html=True,)
+                #st.markdown('<div class="centered-info"><span style="margin-left: 10px;">Methods</span></div>',unsafe_allow_html=True,)
+                st.divider()
                 target_variable = st.selectbox("**:blue[Target variable]**", numerical_columns)
+                st.divider()
+                
+                st.markdown('<div class="centered-info"><span style="margin-left: 10px;">Methods & Parameters</span></div>',unsafe_allow_html=True,)
                 ad_det_type = st.selectbox("**:blue[Select a Anomaly Detection Method]**", [
                                     "Isolation Forest",
                                     "Z-score",
@@ -287,9 +291,7 @@ with col1:
                                     "Clustering based Local Outlier Factor (CBLOF)",
                                     "Extreme Boosting Based Outlier Detection (XGBOD)"
                                     ])
-                
-                st.markdown('<div class="centered-info"><span style="margin-left: 10px;">Parameters</span></div>',unsafe_allow_html=True,)
-                
+                                
                 if ad_det_type == "Z-score":  
                     zscore_threshold = st.slider("Z-score Threshold", min_value=1, max_value=10, value=3)
                     anomalies = detect_anomalies_zscore(df, target_variable, threshold=zscore_threshold)
