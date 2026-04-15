@@ -26,14 +26,16 @@ from pyod.models.gmm import GMM
 from pyod.models.cblof import CBLOF
 from pyod.models.xgbod import XGBOD
 #---------------------------------------------------------------------------------------------------------------------------------
-### Title and description for your Streamlit app
+### Title for your Streamlit app
 #---------------------------------------------------------------------------------------------------------------------------------
 #import custom_style()
 st.set_page_config(page_title="Anomaly Detection | v0.3",
                    layout="wide",
                    page_icon= "📈",             
                    initial_sidebar_state="collapsed")
-#----------------------------------------
+#---------------------------------------------------------------------------------------------------------------------------------
+### Description for your Streamlit app
+#---------------------------------------------------------------------------------------------------------------------------------
 st.markdown(
     """
     <style>
@@ -52,12 +54,27 @@ st.markdown(
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
+    .version-badge {
+        text-align: center;
+        display: inline-block;
+        background: linear-gradient(120deg, #0056b3, #0d4a96);
+        color: white;
+        padding: 2px 12px;
+        border-radius: 20px;
+        font-size: 1.15rem;
+        margin-top: 8px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
     </style>
-    <div class="title-large">Anomaly Detection</div>
-    <div class="title-small">Play with Abnormalities | v0.3</div>
+    <div style="text-align: center;">
+        <div class="title-large">Anomaly Detection</div>
+        <div class="version-badge">Play with Abnormalities | v0.3</div>
+    </div>        
     """,
-    unsafe_allow_html=True
-)
+    unsafe_allow_html=True)
+
 #----------------------------------------
 st.markdown(
     """
@@ -82,32 +99,66 @@ st.markdown(
         color: blue;
     }
     </style>
-
     <div class="footer">
-        <p>© 2025 | Created by : <span class="highlight">Avijit Chakraborty</span> | <a href="mailto:avijit.mba18@gmail.com"> 📩 </a></p>  <span class="highlight">Thank you for visiting the app | Unauthorized uses or copying is strictly prohibited | For best view of the app, please zoom out the browser to 75%.</span>
+        <p>© 2026 | Created by : <span class="highlight">Avijit Chakraborty</span> <a href="mailto:avijit.mba18@gmail.com"> 📩 </a> | <span class="highlight">Thank you for visiting the app | Unauthorized uses or copying is strictly prohibited | For best view of the app, please zoom out the browser to 75%.</span> </p>
     </div>
-    """,
-    unsafe_allow_html=True)
-#----------------------------------------
+    """,unsafe_allow_html=True)
+
+#---------------------------------------------------------------------------------------------------------------------------------
+### CSS
+#---------------------------------------------------------------------------------------------------------------------------------
 st.markdown(
-            """
-            <style>
-                .centered-info {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-weight: bold;
-                font-size: 15px;
-                color: #007BFF; 
-                padding: 5px;
-                background-color: #E8F4FF; 
-                border-radius: 5px;
-                border: 1px solid #007BFF;
-                margin-top: 5px;
-                margin-bottom: 5px;
-                }
-            </style>
-            """,unsafe_allow_html=True,)
+    """
+    <style>
+    .centered-info {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        font-size: 15px;
+        color: #007BFF; 
+        padding: 5px;
+        background-color: #FAF8F7; 
+        border-radius: 20px;
+        border: 1px solid #007BFF;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+    .info-container {
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-left: 6px solid #3498db;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+    .info-container h3 {
+        color: #3498db;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    .info-container p {
+        color: #333;
+        margin: 5px 0;
+    }
+    .info-container ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    .info-container li {
+        margin: 10px 0;
+        display: flex;
+        align-items: center;
+    }
+    .info-container li:before {
+        content: "⭐";
+        margin-right: 10px;
+        color: #3498db;
+        font-size: 1.2em;
+    }
+    </style>
+    """,unsafe_allow_html=True,)
+
 #---------------------------------------------------------------------------------------------------------------------------------
 ### Functions & Definitions
 #---------------------------------------------------------------------------------------------------------------------------------
@@ -197,6 +248,7 @@ def get_numerical_columns(df):
 @st.cache_data(ttl="2h")
 def convert_df_to_csv(df):
     return df.to_csv(index=False).encode('utf-8')
+
 #---------------------------------------------------------------------------------------------------------------------------------
 ### Main App
 #---------------------------------------------------------------------------------------------------------------------------------
@@ -205,40 +257,6 @@ def convert_df_to_csv(df):
 with st.popover("**:red[📚 Knowledge Database: Anomaly Detection Methods]**", disabled=False, use_container_width=True): 
 #with st.expander("**:blue[📚 Knowledge Database: Anomaly Detection Methods]**", expanded=False):
     st.markdown("""
-    <style>
-    .info-container {
-        padding: 20px;
-        background-color: #f9f9f9;
-        border-left: 6px solid #3498db;
-        border-radius: 5px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-    }
-    .info-container h3 {
-        color: #3498db;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-    .info-container p {
-        color: #333;
-        margin: 5px 0;
-    }
-    .info-container ul {
-        list-style-type: none;
-        padding: 0;
-    }
-    .info-container li {
-        margin: 10px 0;
-        display: flex;
-        align-items: center;
-    }
-    .info-container li:before {
-        content: "⭐";
-        margin-right: 10px;
-        color: #3498db;
-        font-size: 1.2em;
-    }
-    </style>
     <div class="info-container">
         <h4>🛠️ Anomaly Detection Methods</h4>
         <ul>
@@ -256,6 +274,7 @@ with st.popover("**:red[📚 Knowledge Database: Anomaly Detection Methods]**", 
     </div>
     """, unsafe_allow_html=True)
 #st.divider()
+
 #---------------------------------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------------------------------
 
@@ -273,7 +292,6 @@ with col1:
                 
             else:    
                 
-                #st.markdown('<div class="centered-info"><span style="margin-left: 10px;">Methods</span></div>',unsafe_allow_html=True,)
                 st.divider()
                 target_variable = st.selectbox("**:blue[Target variable (for anomaly detection)]**", numerical_columns)
                 st.divider()
@@ -291,6 +309,8 @@ with col1:
                                     "Clustering based Local Outlier Factor (CBLOF)",
                                     "Extreme Boosting Based Outlier Detection (XGBOD)"
                                     ])
+                
+                st.divider()
                                 
                 if ad_det_type == "Z-score":  
                     zscore_threshold = st.slider("Z-score Threshold", min_value=1, max_value=10, value=3)
@@ -333,11 +353,11 @@ with col1:
                         
                         st.markdown('<div class="centered-info"><span style="margin-left: 10px;">Previews of Basic Informations</span></div>',unsafe_allow_html=True,)
                         st.table(df.head(2))
-                        st.write("No of rows before anomaly detection :",df.shape[0], use_container_width=True)
+                        st.write("No of rows before anomaly detection :",df.shape[0],)
        
                         st.markdown('<div class="centered-info"><span style="margin-left: 10px;">Anomalies</span></div>',unsafe_allow_html=True,)
                         st.warning("#### Anomalies Detected:")
-                        st.write("No of rows having anomaly : ",anomalies.shape[0], use_container_width=True)
+                        st.write("No of rows having anomaly : ",anomalies.shape[0],)
                         st.table(anomalies.head(3))
                         csv = convert_df_to_csv(anomalies)
                         st.download_button(label="📥 Download Anomalies CSV",data=csv,file_name='anomalies.csv',mime='text/csv')
@@ -353,5 +373,5 @@ with col1:
                         ax.legend()
                         plt.xticks(rotation=45)
                         sns.despine()
-                        st.pyplot(fig, use_container_width=True)
+                        st.pyplot(fig, width='stretch')
 
